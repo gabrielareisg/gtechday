@@ -67,7 +67,7 @@ src/
 - Username deve existir na tabela de login
 
 ### 3.3 Tasks
-- Status deve ser um dos valores válidos: ['pending', 'pending', 'completed']
+- Status deve ser um dos valores válidos: ['open', 'pending', 'completed']
 - Priority deve ser um número entre 1 e 5
 - Description é obrigatória
 - User deve existir na tabela de login
