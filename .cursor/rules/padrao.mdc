@@ -1,0 +1,8 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Utilize Shadcn para todos componentes visuais e lucide-react (já instalados)
+# Evite instalação de novos componentes sempre priorizando o shadcn
+# Utilize pnpm para gerenciador de pacotes
