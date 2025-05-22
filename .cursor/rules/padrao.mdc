@@ -6,3 +6,157 @@ alwaysApply: true
 # Utilize Shadcn para todos componentes visuais e lucide-react (já instalados)
 # Evite instalação de novos componentes sempre priorizando o shadcn
 # Utilize pnpm para gerenciador de pacotes
+
+# Padrões e Regras da Aplicação
+
+## 1. Estrutura do Projeto
+
+### 1.1 Organização de Diretórios
+```
+src/
+├── app/          # Rotas e páginas da aplicação
+├── components/   # Componentes reutilizáveis
+├── db/          # Configuração e esquema do banco de dados
+└── lib/         # Utilitários e funções auxiliares
+```
+
+## 2. Banco de Dados
+
+### 2.1 Tabelas
+
+#### 2.1.1 Login
+- **username**: varchar(255) - Chave primária
+- **password**: varchar(10) - Senha do usuário
+- **user_type**: integer - Tipo de usuário
+
+#### 2.1.2 Tickets
+- **id**: serial - Chave primária
+- **username**: varchar(255) - Usuário associado
+- **status**: varchar(10) - Status do ticket
+- **priority**: integer - Prioridade
+- **date_created**: timestamp - Data de criação
+- **description**: varchar(4000) - Descrição do ticket
+- **category**: varchar(255) - Categoria do ticket
+- **last_reply**: varchar(4000) - Última resposta
+- **date_updated**: timestamp - Data de atualização
+- **date_finished**: timestamp - Data de finalização
+
+#### 2.1.3 Tasks
+- **id**: serial - Chave primária
+- **user**: varchar(255) - Usuário responsável
+- **description**: varchar(4000) - Descrição da tarefa
+- **status**: varchar(10) - Status da tarefa
+- **priority**: integer - Prioridade
+- **date_created**: timestamp - Data de criação
+- **date_updated**: timestamp - Data de atualização
+- **date_delivered**: timestamp - Data de entrega
+- **date_deadline**: timestamp - Data limite
+
+## 3. Regras de Validação
+
+### 3.1 Login
+- Username deve ser único
+- Password deve ter no máximo 10 caracteres
+- User_type deve ser um número inteiro válido
+
+### 3.2 Tickets
+- Status deve ser um dos valores válidos: ['open', 'closed', 'pending']
+- Priority deve ser um número entre 1 e 5
+- Description é obrigatória
+- Category é obrigatória
+- Username deve existir na tabela de login
+
+### 3.3 Tasks
+- Status deve ser um dos valores válidos: ['pending', 'pending', 'completed']
+- Priority deve ser um número entre 1 e 5
+- Description é obrigatória
+- User deve existir na tabela de login
+- Date_deadline deve ser uma data futura
+
+## 4. Padrões de Código
+
+### 4.1 Nomenclatura
+- Arquivos de componentes: PascalCase (ex: TicketList.tsx)
+- Arquivos de utilidades: camelCase (ex: dateUtils.ts)
+- Variáveis e funções: camelCase
+- Constantes: UPPER_SNAKE_CASE
+- Interfaces e Types: PascalCase
+
+### 4.2 Estrutura de Componentes
+```typescript
+// Imports
+import { ... } from '...';
+
+// Types/Interfaces
+interface Props {
+  // ...
+}
+
+// Component
+export const ComponentName: React.FC<Props> = ({ ... }) => {
+  // Hooks
+  // State
+  // Effects
+  // Handlers
+  // Render
+  return (
+    // ...
+  );
+};
+```
+
+### 4.3 Tratamento de Erros
+- Usar try/catch em operações assíncronas
+- Implementar feedback visual para erros
+- Logar erros no console em desenvolvimento
+- Tratar erros de API adequadamente
+
+## 5. Regras de Negócio
+
+### 5.1 Tickets
+- Apenas usuários autenticados podem criar tickets
+- Tickets podem ser atualizados apenas pelo criador ou administradores
+- Tickets fechados não podem ser reabertos sem justificativa
+- Prioridade alta deve ter prazo de resposta mais curto
+
+### 5.2 Tasks
+- Tasks devem ter data limite definida
+- Tasks não podem ser marcadas como concluídas sem data de entrega
+- Prioridade alta deve ter prazo mais curto
+- Tasks podem ser reatribuídas apenas por administradores
+
+### 5.3 Usuários
+- Diferentes níveis de acesso baseados em user_type
+- Senhas devem ser armazenadas de forma segura
+- Usuários não podem excluir tickets/tasks de outros usuários
+
+## 6. Segurança
+
+### 6.1 Autenticação
+- Implementar autenticação JWT
+- Tokens devem expirar após período determinado
+- Implementar refresh token
+
+### 6.2 Autorização
+- Validar permissões em todas as operações
+- Implementar middleware de autenticação
+- Proteger rotas sensíveis
+
+### 6.3 Dados
+- Sanitizar inputs
+- Validar dados antes de salvar
+- Implementar rate limiting
+- Usar HTTPS em produção
+
+## 7. Performance
+
+### 7.1 Otimizações
+- Implementar paginação em listagens
+- Usar cache quando apropriado
+- Otimizar queries do banco de dados
+- Implementar lazy loading de componentes
+
+### 7.2 Monitoramento
+- Implementar logging de erros
+- Monitorar performance de queries
+- Rastrear métricas de uso
